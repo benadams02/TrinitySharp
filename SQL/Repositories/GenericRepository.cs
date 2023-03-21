@@ -19,16 +19,16 @@ namespace TrinitySharp.SQL.Repositories
             editableProperties = GetSqlProperties(thisType).Values.ToList();
         }
 
-        public bool Delete(int ID)
+        public virtual bool Delete(int ID)
         {
             throw new NotImplementedException();
         }
 
-        public IQueryable<ModelType> GetAll()
+        public virtual IQueryable<ModelType> GetAll()
         {
             
 
-            if (sqlTableAttr != null) //&& //!string.IsNullOrEmpty(sqlTableAttr.GetSP))
+            if (sqlTableAttr != null)
             {
                 Type thisType = typeof(ModelType);
                 Dictionary<Attributes.SqlColumn, PropertyInfo> SqlColumns = GetSqlProperties(thisType);
@@ -68,12 +68,12 @@ namespace TrinitySharp.SQL.Repositories
             }
         }
 
-        public bool Save(ModelType ObjIn)
+        public virtual bool Save(ModelType ObjIn)
         {
             throw new NotImplementedException();
         }
 
-        public bool Update(ModelType ObjIn)
+        public virtual bool Update(ModelType ObjIn)
         {
             throw new NotImplementedException();
         }
