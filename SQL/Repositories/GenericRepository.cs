@@ -51,7 +51,7 @@ namespace TrinitySharp.SQL.Repositories
             {
                 string sqlPrimaryKey = SqlColumns.Where(x => x.Key.PrimaryKey == true).Select(x => x.Key.FieldName).First();
 
-                var results = Server.DataSource.Connection.Query<ModelType>($"SELECT * FROM [{sqlTableAttr.TableName}] WHERE [{sqlPrimaryKey}] = {ID}");
+                var results = Connection.Query<ModelType>($"SELECT * FROM [{sqlTableAttr.TableName}] WHERE [{sqlPrimaryKey}] = {ID}");
 
                 if (results.Count() > 0)
                 {
