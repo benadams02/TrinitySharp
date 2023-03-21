@@ -40,10 +40,10 @@ namespace TrinitySharp
         {
             if (sqlConnection == null) { throw new ArgumentNullException(nameof(sqlConnection)); }
 
-            return OpenConnection(0, sqlConnection);
+            return OpenConnection(sqlConnection, 0);
         }
 
-        private static bool OpenConnection(int retryCount = 0, SqlConnection sqlConnection)
+        private static bool OpenConnection(SqlConnection sqlConnection, int retryCount = 0)
         {
             if (retryCount <= 3)
             {
@@ -58,20 +58,20 @@ namespace TrinitySharp
                         }
                         else
                         {
-                            return OpenConnection(retryCount++, sqlConnection);
+                            return OpenConnection(sqlConnection, retryCount++);
                         }
                     }
                     catch (Exception)
                     {
                         sqlConnection.Close();
-                        OpenConnection(retryCount++, sqlConnection);
+                        OpenConnection(sqlConnection, retryCount++);
                         throw;
                     }
                 }
                 else
                 {
                     sqlConnection.Close();
-                    return OpenConnection(retryCount++, sqlConnection);
+                    return OpenConnection(sqlConnection, retryCount++);
                 }
             }
             else
