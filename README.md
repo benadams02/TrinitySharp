@@ -1,2 +1,2 @@
 # TrinitySharp
-Open-source .NET 7 library providing useful classes and functions.
+Open-source Framework for .NET that makes building back-ends extremely quick. Built in parallel with Dapper and the SqlClient library. TrinitySharp follows the repository Pattern for managing SQL transactions.
