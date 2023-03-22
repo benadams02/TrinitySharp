@@ -1,33 +1,12 @@
-﻿using System.Data.SqlClient;
-using System.Text.RegularExpressions;
+﻿using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace TrinitySharp
 {
-    public static class Extensions
-    {
-        
-    }
-    public static partial class DateTimeExtensions
-    {
-        public static string ToISO8601Representation(this DateTime dateTime)
-        {
-            if (dateTime == null) { throw new ArgumentNullException(nameof(dateTime)); }
-
-            return dateTime.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ");
-        }
-    }
-
-    public static partial class StringExtensions
-    {
-        public static bool IsBase64String(this string stringIn)
-        {
-            if (stringIn == null) { throw new ArgumentNullException(nameof(stringIn)); }
-
-            stringIn = stringIn.Trim();
-            return (stringIn.Length % 4 == 0) && Regex.IsMatch(stringIn, @"^[a-zA-Z0-9\+/]*={0,3}$", RegexOptions.None);
-        }
-    }
-
     public static partial class SqlConnectionExtensions
     {
         /// <summary>
@@ -80,5 +59,4 @@ namespace TrinitySharp
             }
         }
     }
-
 }

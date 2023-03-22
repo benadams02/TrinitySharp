@@ -78,6 +78,26 @@ namespace TrinitySharp.SQL.Repositories
             throw new NotImplementedException();
         }
 
+        public virtual ModelType Insert(ModelType ObjIn)
+        {
+            string sqlStatement = ObjIn.GetType().GenerateSqlInsertString();
+            sqlStatement = sqlStatement = sqlStatement + "; SELECT SCOPE_IDENTITY()";
+            SqlCommand cmd = new SqlCommand(sqlStatement, Connection);
+            var paramList = ObjIn.GenerateSqlParamterCollection().ToList();
+            if (paramList != null && paramList.Count >0) 
+            {
+                foreach (var param in paramList)
+                {
+                    cmd.Parameters.Add(param);
+                }
+            }
+
+            var result = Convert.ToInt32(cmd.ExecuteScalar().ToString());
+            ObjIn.GetType().GetPrimaryKeyProperty().SetValue(ObjIn,(int)result);
+
+            return ObjIn;
+        }
+
         protected static Dictionary<Attributes.SqlColumn, PropertyInfo> GetSqlProperties(Type type)
         {
             Dictionary<Attributes.SqlColumn, PropertyInfo> SqlColumns = new Dictionary<Attributes.SqlColumn, PropertyInfo>();
