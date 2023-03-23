@@ -9,13 +9,39 @@
             private System.Data.SqlDbType sqlDbType;
             private int maxFieldSize;
             private bool primaryKey;
+            private string _propertyName;
 
-            public SqlColumn(string FieldName, System.Data.SqlDbType SqlDbType, int MaxFieldSize = 999, bool PrimaryKey = false)
+            public SqlColumn(string FieldName, System.Data.SqlDbType SqlDbType)
+            {
+                this.FieldName = FieldName;
+                this.SqlDbType = SqlDbType;
+                this.MaxFieldSize = 999;
+                this.PrimaryKey = false;
+                this.PropertyName = string.Empty;
+            }
+            public SqlColumn(string FieldName, System.Data.SqlDbType SqlDbType, int MaxFieldSize)
+            {
+                this.FieldName = FieldName;
+                this.SqlDbType = SqlDbType;
+                this.MaxFieldSize = MaxFieldSize;
+                this.PrimaryKey = false;
+                this.PropertyName = string.Empty;
+            }
+            public SqlColumn(string FieldName, System.Data.SqlDbType SqlDbType, int MaxFieldSize, bool PrimaryKey)
             {
                 this.FieldName = FieldName;
                 this.SqlDbType = SqlDbType;
                 this.MaxFieldSize = MaxFieldSize;
                 this.PrimaryKey = PrimaryKey;
+                this.PropertyName = string.Empty;
+            }
+            public SqlColumn(string FieldName, System.Data.SqlDbType SqlDbType, int MaxFieldSize, bool PrimaryKey, string PropertyName)
+            {
+                this.FieldName = FieldName;
+                this.SqlDbType = SqlDbType;
+                this.MaxFieldSize = MaxFieldSize;
+                this.PrimaryKey = PrimaryKey;
+                this.PropertyName = PropertyName;
             }
             public int MaxFieldSize
             {
@@ -39,6 +65,12 @@
             {
                 get { return primaryKey; }
                 set { primaryKey = value; }
+            }
+
+            public string PropertyName
+            {
+                get { return _propertyName; }
+                set { _propertyName = value; }
             }
         }
 

@@ -21,7 +21,15 @@ namespace TrinitySharp.SQL.Repositories
 
         public virtual bool Delete(int ID)
         {
-            throw new NotImplementedException();
+            string sqlStatement = typeof(ModelType).GenerateSqlDeleteString();
+            SqlCommand cmd = new SqlCommand(sqlStatement, Connection);
+            var pkAttr = typeof(ModelType).GetPrimaryKeyAttribute();
+            if (pkAttr != null)
+            {
+                cmd.Parameters.Add(new SqlParameter($"@{pkAttr.FieldName}", pkAttr.SqlDbType) { Value = ID});
+            }
+
+            return cmd.ExecuteNonQuery() > 0;
         }
 
         public virtual IQueryable<ModelType> GetAll()
@@ -75,15 +83,26 @@ namespace TrinitySharp.SQL.Repositories
 
         public virtual bool Update(ModelType ObjIn)
         {
-            throw new NotImplementedException();
+            string sqlStatement = typeof(ModelType).GenerateSqlUpdateString();
+            SqlCommand cmd = new SqlCommand(sqlStatement, Connection);
+            var paramList = ObjIn.GenerateSqlParameterCollection().ToList();
+            if (paramList != null && paramList.Count > 0)
+            {
+                foreach (var param in paramList)
+                {
+                    cmd.Parameters.Add(param);
+                }
+            }
+
+            return cmd.ExecuteNonQuery() > 0;
         }
 
         public virtual ModelType Insert(ModelType ObjIn)
         {
-            string sqlStatement = ObjIn.GetType().GenerateSqlInsertString();
-            sqlStatement = sqlStatement = sqlStatement + "; SELECT SCOPE_IDENTITY()";
+            string sqlStatement = typeof(ModelType).GenerateSqlInsertString();
+            sqlStatement += "; SELECT SCOPE_IDENTITY()";
             SqlCommand cmd = new SqlCommand(sqlStatement, Connection);
-            var paramList = ObjIn.GenerateSqlParamterCollection().ToList();
+            var paramList = ObjIn.GenerateSqlParameterCollection(true).ToList();
             if (paramList != null && paramList.Count >0) 
             {
                 foreach (var param in paramList)

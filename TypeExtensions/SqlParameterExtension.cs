@@ -16,7 +16,7 @@ namespace TrinitySharp
         /// <param name="typeIn"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        internal static IEnumerable<SqlParameter> GenerateSqlParamterCollection(this object obj)
+        internal static IEnumerable<SqlParameter> GenerateSqlParameterCollection(this object obj, bool ExcludePrimaryKey = false)
         {
             if (obj == null) { throw new ArgumentNullException(nameof(obj)); }
 
@@ -31,8 +31,13 @@ namespace TrinitySharp
                     PropertyInfo prop = properties[i];
                     Attributes.SqlColumn attr = prop.GetCustomAttribute<Attributes.SqlColumn>();
 
-                    if (attr != null && attr.PrimaryKey == false)
+                    if (attr != null)
                     {
+                        if(attr.PrimaryKey && ExcludePrimaryKey)
+                        {
+                            continue;
+                        }
+
                         SqlParameter sqlParam = new SqlParameter();
                         sqlParam.ParameterName = $"@{attr.FieldName}";
                         sqlParam.SqlDbType = attr.SqlDbType;
