@@ -17,7 +17,7 @@
                 this.SqlDbType = SqlDbType;
                 this.MaxFieldSize = 999;
                 this.PrimaryKey = false;
-                this.PropertyName = string.Empty;
+                this.PropertyName = FieldName;
             }
             public SqlColumn(string FieldName, System.Data.SqlDbType SqlDbType, int MaxFieldSize)
             {
@@ -25,7 +25,7 @@
                 this.SqlDbType = SqlDbType;
                 this.MaxFieldSize = MaxFieldSize;
                 this.PrimaryKey = false;
-                this.PropertyName = string.Empty;
+                this.PropertyName = FieldName;
             }
             public SqlColumn(string FieldName, System.Data.SqlDbType SqlDbType, int MaxFieldSize, bool PrimaryKey)
             {
@@ -33,7 +33,7 @@
                 this.SqlDbType = SqlDbType;
                 this.MaxFieldSize = MaxFieldSize;
                 this.PrimaryKey = PrimaryKey;
-                this.PropertyName = string.Empty;
+                this.PropertyName = FieldName;
             }
             public SqlColumn(string FieldName, System.Data.SqlDbType SqlDbType, int MaxFieldSize, bool PrimaryKey, string PropertyName)
             {
