@@ -9,19 +9,21 @@ namespace TrinitySharp.SQL.Repositories
     {
         private Type thisType;
         protected Attributes.SqlTable sqlTableAttr { get; set; }
-        protected List<PropertyInfo> editableProperties { get; set; }
-        private SqlConnection Connection { get; set; } 
+        protected SqlConnection Connection { get; set; }
+        protected Dictionary<Attributes.SqlColumn, PropertyInfo> SqlColumns { get; set; }
         public GenericRepository(SqlConnection sqlConnection)
         {
             thisType = typeof(ModelType);
             Connection = sqlConnection;
             sqlTableAttr = thisType.GetCustomAttributes(typeof(Attributes.SqlTable), true).FirstOrDefault() as Attributes.SqlTable;
-            editableProperties = GetSqlProperties(thisType).Values.ToList();
+            SqlColumns = GetSqlProperties(thisType);
         }
 
         public virtual bool Delete(int ID)
         {
             string sqlStatement = typeof(ModelType).GenerateSqlDeleteString();
+            if (string.IsNullOrEmpty(sqlStatement)) return false;
+
             SqlCommand cmd = new SqlCommand(sqlStatement, Connection);
             var pkAttr = typeof(ModelType).GetPrimaryKeyAttribute();
             if (pkAttr != null)
@@ -34,13 +36,8 @@ namespace TrinitySharp.SQL.Repositories
 
         public virtual IQueryable<ModelType> GetAll()
         {
-            
-
             if (sqlTableAttr != null)
             {
-                Type thisType = typeof(ModelType);
-                Dictionary<Attributes.SqlColumn, PropertyInfo> SqlColumns = GetSqlProperties(thisType);
-
                 IEnumerable<ModelType> objects = Connection.Query<ModelType>($"SELECT * FROM [{sqlTableAttr.TableName}]");
                 
                 return objects.AsQueryable();
@@ -53,8 +50,7 @@ namespace TrinitySharp.SQL.Repositories
 
         public virtual ModelType GetByID(int ID)
         {
-            Dictionary<Attributes.SqlColumn, PropertyInfo> SqlColumns = GetSqlProperties(thisType);
-
+            
             if (sqlTableAttr != null)
             {
                 string sqlPrimaryKey = SqlColumns.Where(x => x.Key.PrimaryKey == true).Select(x => x.Key.FieldName).First();
@@ -84,6 +80,8 @@ namespace TrinitySharp.SQL.Repositories
         public virtual bool Update(ModelType ObjIn)
         {
             string sqlStatement = typeof(ModelType).GenerateSqlUpdateString();
+            if (string.IsNullOrEmpty(sqlStatement)) return false;
+
             SqlCommand cmd = new SqlCommand(sqlStatement, Connection);
             var paramList = ObjIn.GenerateSqlParameterCollection().ToList();
             if (paramList != null && paramList.Count > 0)
@@ -100,6 +98,8 @@ namespace TrinitySharp.SQL.Repositories
         public virtual ModelType Insert(ModelType ObjIn)
         {
             string sqlStatement = typeof(ModelType).GenerateSqlInsertString();
+            if (string.IsNullOrEmpty(sqlStatement)) return default(ModelType);
+
             sqlStatement += "; SELECT SCOPE_IDENTITY()";
             SqlCommand cmd = new SqlCommand(sqlStatement, Connection);
             var paramList = ObjIn.GenerateSqlParameterCollection(true).ToList();
@@ -109,6 +109,10 @@ namespace TrinitySharp.SQL.Repositories
                 {
                     cmd.Parameters.Add(param);
                 }
+            }
+            else
+            {
+                return default(ModelType);
             }
 
             var result = Convert.ToInt32(cmd.ExecuteScalar().ToString());
