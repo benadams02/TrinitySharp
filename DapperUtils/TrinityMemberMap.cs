@@ -14,8 +14,8 @@ namespace TrinitySharp.DapperUtils
             _columnName= ColumnName;
             _property= Property;
         }
-        private string _columnName = string.Empty;
-        private PropertyInfo _property;
+        private readonly string _columnName = string.Empty;
+        private readonly PropertyInfo _property;
         public string ColumnName => _columnName;
 
         public Type MemberType => Property?.PropertyType;

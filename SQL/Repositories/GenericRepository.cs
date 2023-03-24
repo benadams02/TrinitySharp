@@ -7,7 +7,7 @@ namespace TrinitySharp.SQL.Repositories
 {
     public class GenericRepository<ModelType> : IRepository<ModelType> where ModelType : class
     {
-        private Type thisType;
+        private readonly Type thisType;
         protected Attributes.SqlTable sqlTableAttr { get; set; }
         protected SqlConnection Connection { get; set; }
         protected Dictionary<Attributes.SqlColumn, PropertyInfo> SqlColumns { get; set; }
@@ -22,7 +22,7 @@ namespace TrinitySharp.SQL.Repositories
         public virtual bool Delete(int ID)
         {
             string sqlStatement = typeof(ModelType).GenerateSqlDeleteString();
-            if (string.IsNullOrEmpty(sqlStatement)) return false;
+            if (string.IsNullOrEmpty(sqlStatement)) { return false; }
 
             SqlCommand cmd = new SqlCommand(sqlStatement, Connection);
             var pkAttr = typeof(ModelType).GetPrimaryKeyAttribute();
@@ -80,7 +80,7 @@ namespace TrinitySharp.SQL.Repositories
         public virtual bool Update(ModelType ObjIn)
         {
             string sqlStatement = typeof(ModelType).GenerateSqlUpdateString();
-            if (string.IsNullOrEmpty(sqlStatement)) return false;
+            if (string.IsNullOrEmpty(sqlStatement)) { return false; }
 
             SqlCommand cmd = new SqlCommand(sqlStatement, Connection);
             var paramList = ObjIn.GenerateSqlParameterCollection().ToList();
@@ -98,7 +98,7 @@ namespace TrinitySharp.SQL.Repositories
         public virtual ModelType Insert(ModelType ObjIn)
         {
             string sqlStatement = typeof(ModelType).GenerateSqlInsertString();
-            if (string.IsNullOrEmpty(sqlStatement)) return default(ModelType);
+            if (string.IsNullOrEmpty(sqlStatement)) { return default(ModelType); }
 
             sqlStatement += "; SELECT SCOPE_IDENTITY()";
             SqlCommand cmd = new SqlCommand(sqlStatement, Connection);
@@ -129,7 +129,7 @@ namespace TrinitySharp.SQL.Repositories
             foreach (var prop in props)
             {
                 var attr = (prop.GetCustomAttribute(typeof(Attributes.SqlColumn), true) as Attributes.SqlColumn);
-                if (attr != null) SqlColumns.Add(attr, prop);
+                if (attr != null) { SqlColumns.Add(attr, prop); }
 
             }
             return SqlColumns;

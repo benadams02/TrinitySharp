@@ -19,7 +19,7 @@ namespace TrinitySharp
             for (int i = 0; i < props.Length; i++)
             {
                 Attributes.SqlColumn attr = props[i].GetCustomAttribute<Attributes.SqlColumn>();
-                if(attr != null && attr.PrimaryKey) return props[i];
+                if (attr != null && attr.PrimaryKey) { return props[i]; }
             }
 
             return null;
@@ -34,7 +34,7 @@ namespace TrinitySharp
             for (int i = 0; i < props.Length; i++)
             {
                 Attributes.SqlColumn attr = props[i].GetCustomAttribute<Attributes.SqlColumn>();
-                if (attr != null && attr.PrimaryKey) return attr;
+                if (attr != null && attr.PrimaryKey) { return attr; }
             }
 
             return null;
@@ -59,7 +59,7 @@ namespace TrinitySharp
                 foreach (var prop in props)
                 {
                     var attr = prop.GetCustomAttribute<Attributes.SqlColumn>();
-                    if (attr != null && attr.PrimaryKey == false) sqlColumns.Add(attr);
+                    if (attr != null && attr.PrimaryKey == false) { sqlColumns.Add(attr); }
 
                 }
 
@@ -110,7 +110,7 @@ namespace TrinitySharp
                 foreach (var prop in props)
                 {
                     var attr = prop.GetCustomAttribute<Attributes.SqlColumn>();
-                    if (attr != null) sqlColumns.Add(attr);
+                    if (attr != null) { sqlColumns.Add(attr); }
 
                 }
 
@@ -124,7 +124,7 @@ namespace TrinitySharp
                     {
                         updateStrings = updateStrings + $"[{str}] = @{str}, ";
                     }
-                    if(updateStrings.EndsWith(", ")) updateStrings = updateStrings.Substring(0, updateStrings.Length - 2);
+                    if (updateStrings.EndsWith(", ")) { updateStrings = updateStrings.Substring(0, updateStrings.Length - 2); }
                     string cmd = $"UPDATE [dbo].[{sqlTable.TableName}] SET {updateStrings} WHERE  [{sqlPrimaryKey}] = @{sqlPrimaryKey}";
 
                     return cmd;
@@ -153,7 +153,7 @@ namespace TrinitySharp
                 foreach (var prop in props)
                 {
                     var attr = prop.GetCustomAttribute<Attributes.SqlColumn>();
-                    if (attr != null && attr.PrimaryKey) sqlColumns.Add(attr);
+                    if (attr != null && attr.PrimaryKey) { sqlColumns.Add(attr); }
 
                 }
 
@@ -184,7 +184,7 @@ namespace TrinitySharp
             foreach (var prop in props)
             {
                 var attr = prop.GetCustomAttribute<Attributes.SqlColumn>();
-                if (attr != null) sqlColumns.Add(attr);
+                if (attr != null) { sqlColumns.Add(attr); }
 
             }
 
